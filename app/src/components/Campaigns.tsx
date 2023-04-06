@@ -48,7 +48,7 @@ const Campaigns = () => {
                 let campaignInfo = await program.account.campaign.fetch(campaign.pubkey);
                 fetchedCampaigns.push({ ...campaignInfo, pubkey: campaign.pubkey })
             }
-            const sortedCampaigns = fetchedCampaigns.sort((a,b) => (parseInt(b.timestampEnd.toString()) - parseInt(a.timestampEnd.toString())));
+            const sortedCampaigns = fetchedCampaigns.sort((a, b) => (parseInt(b.timestampEnd.toString()) - parseInt(a.timestampEnd.toString())));
             setCampaigns(sortedCampaigns);
         } catch (error) {
             console.log("Something went wrong");
@@ -148,13 +148,15 @@ const Campaigns = () => {
                 </div>
                 <button className='bg-green-500 text-white p-6 rounded-xl text-xl hover:bg-green-600' onClick={createCampaign}>Create new Campaign</button>
             </div>
-            <div className='flex justify-center items-center mt-6 space-x-6'>
+            <div className='flex flex-wrap justify-around items-center mt-6 gap-6'>
                 {
                     campaigns?.length === 0 ?
                         <p>Not campaigns found</p>
                         :
                         campaigns.map((campaign, index) => (
-                            <CampaignCard key={index} anchorProvider={anchorProvider} fetchCampaigns={fetchCampaigns} campaignInfo={campaign} />
+                            <div className='flex justify-center items-center'>
+                                <CampaignCard key={index} anchorProvider={anchorProvider} fetchCampaigns={fetchCampaigns} campaignInfo={campaign} />
+                            </div>
                         ))
                 }
             </div>

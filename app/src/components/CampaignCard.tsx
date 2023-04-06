@@ -1,10 +1,8 @@
 import { FC, useState } from "react";
 import { Campaign } from "./Campaigns";
-import { useConnection, useWallet } from '@solana/wallet-adapter-react';
 import idl from "../idl/solfundme.json";
-import { Program, AnchorProvider, web3, utils, BN } from "@project-serum/anchor";
+import { Program, web3, BN } from "@project-serum/anchor";
 import { LAMPORTS_PER_SOL, PublicKey } from '@solana/web3.js';
-import { useEffect } from 'react';
 
 const programID = new PublicKey(idl.metadata.address);
 const idlString = JSON.stringify(idl);
@@ -13,8 +11,8 @@ const idlObject = JSON.parse(idlString);
 const ProgressBar = ({ width }: { width: string }) => {
     return (
         <div className='w-full h-5 relative'>
-            <div className={`${width} h-full bg-green-500`}></div>
-            <div className='absolute right-0 top-0 w-full h-5 bg-green-100' />
+            <div className={`${width} absolute left-0 top-0 z-10 h-full bg-green-500`}></div>
+            <div className='absolute left-0 top-0 w-full h-5 bg-green-100' />
         </div>
     )
 }
@@ -49,15 +47,6 @@ const CampaignCard: FC<CampaignProps> = ({ anchorProvider, fetchCampaigns, campa
     const isOver = Math.round(Date.now() / 1000) > parseInt(campaignInfo.timestampEnd.toString());
     const isPledger = anchorProvider.wallet.publicKey && campaignInfo.pledgers.some(pledger => pledger.address.toString() === anchorProvider.wallet.publicKey.toString());
     const isOwner = parseFloat(campaignInfo.pledged.toString()) > parseFloat(campaignInfo.goal.toString());
-
-    useEffect(() => {
-        if (campaignInfo.name.includes("Breakpoint")) {
-            console.log("isOver");
-            console.log(isOver);
-            console.log("isFunded");
-            console.log(isFunded);
-        }
-    }, [])
     
     const sendPledge = async (campaign: PublicKey, amount: string) => {
         try {
@@ -128,12 +117,12 @@ const CampaignCard: FC<CampaignProps> = ({ anchorProvider, fetchCampaigns, campa
     return (
         <div className='w-96 h-[30rem] border border-green-500 border-2'>
             <img src={`https://picsum.photos/450/200?random=${campaignInfo.pubkey.toString().slice(0, 10)}`} alt="thumbnail" />
-            <ProgressBar width={`w-[${(30 * parseInt(campaignInfo.pledged.toString()) / parseInt(campaignInfo.goal.toString())) / 100}rem]`} />
+            <ProgressBar width={`w-[${Math.round(24 * parseInt(campaignInfo.pledged.toString()) / parseInt(campaignInfo.goal.toString()))}rem]`} />
             <div className='relative w-full p-4'>
                 <StatusTag campaignInfo={campaignInfo} />
                 <h1 className='text-2xl'>{campaignInfo.name}</h1>
                 <p>By {campaignInfo.owner.toString().slice(0, 10)}...{campaignInfo.owner.toString().slice(-10)}</p>
-                <p className='text-green-600 font-bold'>{parseInt(campaignInfo.pledged.toString()) / parseInt(campaignInfo.goal.toString())}% funded</p>
+                <p className='text-green-600 font-bold'>{Math.round(parseInt(campaignInfo.pledged.toString()) / parseInt(campaignInfo.goal.toString()) * 100)}% funded</p>
                 <p className='break-all mt-4'>{campaignInfo.description}</p>
 
                 <div className='flex flex-col justify-between space-y-2 mt-6'>
