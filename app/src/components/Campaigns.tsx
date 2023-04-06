@@ -154,8 +154,8 @@ const Campaigns = () => {
                         <p>Not campaigns found</p>
                         :
                         campaigns.map((campaign, index) => (
-                            <div className='flex justify-center items-center'>
-                                <CampaignCard key={index} anchorProvider={anchorProvider} fetchCampaigns={fetchCampaigns} campaignInfo={campaign} />
+                            <div key={index} className='flex justify-center items-center'>
+                                <CampaignCard anchorProvider={anchorProvider} fetchCampaigns={fetchCampaigns} campaignInfo={campaign} />
                             </div>
                         ))
                 }
