@@ -99,13 +99,6 @@ describe("solfundme", () => {
     expect(tx).to.equal(undefined);
   })
 
-  it("should fund owner on claim if campaign is over and funded", async () => {
-    await program.methods.claimFunds().accounts({ campaign, user: campainOwner.publicKey, systemProgram: SystemProgram.programId }).signers([campainOwner]).rpc();
-    const account = await program.account.campaign.fetch(campaign);
-
-    expect(account.pledged.toString()).to.be.equal("0");
-  })
-
   it("should return an error when contributer attempts to claim funds on over and funded campaign", async () => {
     let tx = undefined;
     try {

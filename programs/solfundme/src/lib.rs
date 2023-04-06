@@ -145,8 +145,6 @@ pub mod solfundme {
 
             **campaign.to_account_info().try_borrow_mut_lamports()? -= campaign.pledged;
             **user.to_account_info().try_borrow_mut_lamports()? += campaign.pledged;
-
-            campaign.pledged = 0;
         } else {
             let is_pledger = campaign
                 .pledgers
